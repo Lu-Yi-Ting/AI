@@ -80,15 +80,13 @@ for t=1:Iteration
     a2=-1+t*((-1)/Iteration);
     
     for i=1:SearchAgents
-%         pos_std = std(DimPosition); % std. of each dimensions.
         r1=rand(); % r1 is a random number in [0,1]
         r2=rand(); % r2 is a random number in [0,1]
         A=2*a*r1-a;  % Eq. (2.3) in the paper
         C=2*r2;      % Eq. (2.4) in the paper
         b=1;               %  parameters in Eq. (2.5)
         l=(a2-1)*rand+1;   %  parameters in Eq. (2.5)
-        p = rand();        % p in Eq. (2.6)
-        
+        p = rand();        % p in Eq. (2.6)        
         
         if p<0.5
             if abs(A)>=1
@@ -98,20 +96,11 @@ for t=1:Iteration
                 Agent(i).Position=X_rand-A*D_X_rand;      % Eq. (2.8)
             elseif abs(A)<1
                 D_Leader=abs(C*Leader.pos-Agent(i).Position); % Eq. (2.1)
-                %Leader_neighbor = Leader.pos + randn() .* pos_std.*exp(-t) + t*exp(-t);
-                %D_Leader_neighbor = C.*Leader_neighbor - Agent(i).Position;
-                %Agent(i).Position=Leader.pos + A.*D_Leader_neighbor;      % Eq. (2.2)
                 Agent(i).Position=Leader.pos + A.*D_Leader;
             end
-        elseif p>=0.5
+        else
             distance2Leader=abs(Leader.pos-Agent(i).Position);% Eq. (2.5)
-            %Leader_neighbor = Leader.pos + randn() .* pos_std.*exp(-t) + t*exp(-t);
-            %distance2Leader = abs(Leader_neighbor - Agent(i).Position);
             Agent(i).Position=distance2Leader*exp(b.*l).*cos(l.*2*pi)+Leader.pos;
-%         elseif p>=2/3
-%             Leader_neighbor = Leader.pos + randn() .* pos_std.*exp(-t) + t*exp(-t);
-%             D_Leader=10.*(Leader_neighbor-Agent(i).Position);
-%             Agent(i).Position=Leader.pos + rand().*D_Leader;
          end
     end
     Convergence_curve(t)=Leader.score;
